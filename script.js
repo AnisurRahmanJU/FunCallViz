@@ -187,6 +187,29 @@ int main() {
           () => { edges.add({from: 2, to: 1, label: "15"}); highlightLine(5); },
           () => { document.getElementById("outputArea").textContent = "Sum: 15"; highlightLine(15); }
         ];
+      else if (func === "fibonacci") {
+        steps = [
+          () => { nodes.add({id: 1, label: "main()"}); highlightLine(6); },
+          () => { nodes.add({id: 2, label: "fib(5)"}); highlightLine(0); },
+          () => { edges.add({from: 1, to: 2, label: "call"}); highlightLine(10); },
+          () => { nodes.add({id: 3, label: "fib(4)"}); highlightLine(0); },
+          () => { edges.add({from: 2, to: 3, label: "call"}); highlightLine(2); },
+          () => { nodes.add({id: 4, label: "fib(3)"}); highlightLine(0); },
+          () => { edges.add({from: 3, to: 4, label: "call"}); highlightLine(2); },
+          () => { nodes.add({id: 5, label: "fib(2)"}); highlightLine(0); },
+          () => { edges.add({from: 4, to: 5, label: "call"}); highlightLine(2); },
+          () => { nodes.add({id: 6, label: "fib(1)"}); highlightLine(1); },
+          () => { edges.add({from: 5, to: 6, label: "call"}); highlightLine(1); },
+          () => { edges.add({from: 6, to: 5, label: "1"}); highlightLine(1); },
+          () => { nodes.add({id: 7, label: "fib(0)"}); highlightLine(2); },
+          () => { edges.add({from: 5, to: 7, label: "call"}); highlightLine(2); },
+          () => { edges.add({from: 7, to: 5, label: "0"}); highlightLine(1); },
+          () => { edges.add({from: 5, to: 4, label: "1"}); highlightLine(1); },
+          () => { edges.add({from: 4, to: 3, label: "2"}); highlightLine(1); },
+          () => { edges.add({from: 3, to: 2, label: "3"}); highlightLine(1); },
+          () => { edges.add({from: 2, to: 1, label: "5"}); highlightLine(1); },
+          () => { document.getElementById("outputArea").textContent = "Result: 5"; highlightLine(7); }
+        ];
       }
     }
 
@@ -205,6 +228,29 @@ int main() {
         stepIndex++;
       }
     }
+else if (func === "fibonacci") {
+        steps = [
+          () => { nodes.add({id: 1, label: "main()"}); highlightLine(6); },
+          () => { nodes.add({id: 2, label: "fib(5)"}); highlightLine(0); },
+          () => { edges.add({from: 1, to: 2, label: "call"}); highlightLine(10); },
+          () => { nodes.add({id: 3, label: "fib(4)"}); highlightLine(0); },
+          () => { edges.add({from: 2, to: 3, label: "call"}); highlightLine(2); },
+          () => { nodes.add({id: 4, label: "fib(3)"}); highlightLine(0); },
+          () => { edges.add({from: 3, to: 4, label: "call"}); highlightLine(2); },
+          () => { nodes.add({id: 5, label: "fib(2)"}); highlightLine(0); },
+          () => { edges.add({from: 4, to: 5, label: "call"}); highlightLine(2); },
+          () => { nodes.add({id: 6, label: "fib(1)"}); highlightLine(1); },
+          () => { edges.add({from: 5, to: 6, label: "call"}); highlightLine(1); },
+          () => { edges.add({from: 6, to: 5, label: "1"}); highlightLine(1); },
+          () => { nodes.add({id: 7, label: "fib(0)"}); highlightLine(2); },
+          () => { edges.add({from: 5, to: 7, label: "call"}); highlightLine(2); },
+          () => { edges.add({from: 7, to: 5, label: "0"}); highlightLine(1); },
+          () => { edges.add({from: 5, to: 4, label: "1"}); highlightLine(1); },
+          () => { edges.add({from: 4, to: 3, label: "2"}); highlightLine(1); },
+          () => { edges.add({from: 3, to: 2, label: "3"}); highlightLine(1); },
+          () => { edges.add({from: 2, to: 1, label: "5"}); highlightLine(1); },
+          () => { document.getElementById("outputArea").textContent = "Result: 5"; highlightLine(7); }
+        ];
 
     loadFunction();
 
@@ -234,6 +280,29 @@ int main() {
     }
 
     loadFunction();
+      else if (func === "fibonacci") {
+        steps = [
+          () => { nodes.add({id: 1, label: "main()"}); highlightLine(6); },
+          () => { nodes.add({id: 2, label: "fib(5)"}); highlightLine(0); },
+          () => { edges.add({from: 1, to: 2, label: "call"}); highlightLine(10); },
+          () => { nodes.add({id: 3, label: "fib(4)"}); highlightLine(0); },
+          () => { edges.add({from: 2, to: 3, label: "call"}); highlightLine(2); },
+          () => { nodes.add({id: 4, label: "fib(3)"}); highlightLine(0); },
+          () => { edges.add({from: 3, to: 4, label: "call"}); highlightLine(2); },
+          () => { nodes.add({id: 5, label: "fib(2)"}); highlightLine(0); },
+          () => { edges.add({from: 4, to: 5, label: "call"}); highlightLine(2); },
+          () => { nodes.add({id: 6, label: "fib(1)"}); highlightLine(1); },
+          () => { edges.add({from: 5, to: 6, label: "call"}); highlightLine(1); },
+          () => { edges.add({from: 6, to: 5, label: "1"}); highlightLine(1); },
+          () => { nodes.add({id: 7, label: "fib(0)"}); highlightLine(2); },
+          () => { edges.add({from: 5, to: 7, label: "call"}); highlightLine(2); },
+          () => { edges.add({from: 7, to: 5, label: "0"}); highlightLine(1); },
+          () => { edges.add({from: 5, to: 4, label: "1"}); highlightLine(1); },
+          () => { edges.add({from: 4, to: 3, label: "2"}); highlightLine(1); },
+          () => { edges.add({from: 3, to: 2, label: "3"}); highlightLine(1); },
+          () => { edges.add({from: 2, to: 1, label: "5"}); highlightLine(1); },
+          () => { document.getElementById("outputArea").textContent = "Result: 5"; highlightLine(7); }
+        ];
 
 
   function nextStep() {
