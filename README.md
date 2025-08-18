@@ -1,4 +1,4 @@
-# Function Call Visualizer
+# Function Call Visualizer 
 
 A **C function call visualizer** that helps learners understand how function calls, recursion, and return values work in C programs. This project visually demonstrates the execution of functions step by step using an interactive graph and code highlighting.
 
