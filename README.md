@@ -27,5 +27,5 @@ A **C function call visualizer** that helps learners understand how function cal
 
 1. Clone or download this repository:
    ```bash
-   git clone https://github.com/yourusername/function-call-visualizer.git
+   git clone https://github.com/AnisurRahmanJU/FuncViz.git
 
