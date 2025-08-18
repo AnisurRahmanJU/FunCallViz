@@ -85,15 +85,15 @@ select {
 </head>
 <body>
   <div class="container">
-    <h2>Function Call Visualizer</h2>
-    <select id="functionSelect" onchange="loadFunction()">
+     <div><h2>Function Call Visualizer</h2></div>
+     <div><select id="functionSelect" onchange="loadFunction()">
       <option value="normal">Normal Function</option>
       <option value="factorial">Factorial</option>
       <option value="fibonacci">Fibonacci</option>
       <option value="gcd">GCD</option>
-    </select>
-    <pre><code class="language-c" id="codeArea"></code></pre>
-    <button onclick="nextStep()">Next Step</button>
+    </select></div>
+    <div><pre><code class="language-c" id="codeArea"></code></pre></div>
+    <div><button onclick="nextStep()">Next Step</button></div>
     <div id="graph"></div>
     <div id="outputArea"></div>
   </div>
