@@ -198,3 +198,49 @@ int main() {
     }
 
     loadFunction();
+
+  function nextStep() {
+      if (stepIndex < steps.length) {
+        steps[stepIndex]();
+        stepIndex++;
+      }
+    }
+
+    loadFunction();
+
+
+  function nextStep() {
+      if (stepIndex < steps.length) {
+        steps[stepIndex]();
+        stepIndex++;
+      }
+    }
+
+    loadFunction();
+
+
+  function nextStep() {
+      if (stepIndex < steps.length) {
+        steps[stepIndex]();
+        stepIndex++;
+      }
+    }
+
+    loadFunction();  function nextStep() {
+      if (stepIndex < steps.length) {
+        steps[stepIndex]();
+        stepIndex++;
+      }
+    }
+
+    loadFunction();
+
+
+  function nextStep() {
+      if (stepIndex < steps.length) {
+        steps[stepIndex]();
+        stepIndex++;
+      }
+    }
+
+    loadFunction();
