@@ -2,286 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Function Call Visualizer</title>
+  <link href="styles.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" />
-  <style>
-  body {
-  font-family: "JetBrains Mono", monospace;
-  background: #1e1e1e;
-  color: #fff;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-.container {
-  width:80%;  
-  height: 100%;
-  margin: auto;
-  padding: 10px;
-  box-sizing: border-box;
-}
-h2 {
-  font-size: 18px;
-  margin: 10px 0;
-}
-pre {
-  text-align: left;
-  border-radius: 8px;
-  padding: 8px;
-  white-space: pre-wrap;
-  overflow-x: auto;
-  font-size: 13px;
-  line-height: 1.4;
-  background: #2a2a2a;
-}
-#graph {
-  width: 80%%;
-  height: 100%;   
-  border: 2px solid #444;
-  border-radius: 10px;
-  background: #111;
-  margin-top: 10px;
-}
-button {
-  display: block;
-  width: 100%;
-  margin: 6px 0;
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background: #007bff;
-  color: white;
-}
-button:hover { background: #0056b3; }
-select {
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
-#outputArea {
-  margin-top: 10px;
-  padding: 10px;
-  background: #222;
-  border-radius: 6px;
-  min-height: 40px;
-  text-align: left;
-  font-size: 13px;
-  overflow-x: auto;
-}
-.highlight-line {
-  background-color: rgba(0, 123, 255, 0.3);
-  display: block;
-  border-left: 3px solid #007bff;
-  padding-left: 6px;
-}
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
-     <div><h2>Function Call Visualizer</h2></div>
-     <div><select id="functionSelect" onchange="loadFunction()">
+    <h2>Function Call Visualizer</h2>
+    <select id="functionSelect" onchange="loadFunction()">
       <option value="normal">Normal Function</option>
       <option value="factorial">Factorial</option>
       <option value="fibonacci">Fibonacci</option>
       <option value="gcd">GCD</option>
-    </select></div>
-    <div><pre><code class="language-c" id="codeArea"></code></pre></div>
-    <div><button onclick="nextStep()">Next Step</button></div>
+    </select>
+    <pre><code class="language-c" id="codeArea"></code></pre>
+    <button onclick="nextStep()">Next Step</button>
     <div id="graph"></div>
     <div id="outputArea"></div>
   </div>
 
-  <script>
-    const codes = {
-      normal: `int add(int a, int b) {
-    return a + b;
-}
-
-int main() {
-    int result = add(3, 4);
-    return result;
-}`,
-      factorial: `int fact(int n) {
-    if (n == 0) return 1;
-    return n * fact(n - 1);
-}
-
-int main() {
-    int result = fact(5);
-    return result;
-}`,
-      fibonacci: `int fib(int n) {
-    if (n <= 1) return n;
-    return fib(n-1) + fib(n-2);
-}
-
-int main() {
-    int result = fib(5);
-    return result;
-}`,
-      gcd: `int gcd(int a, int b) {
-    if (b == 0) return a;
-    return gcd(b, a % b);
-}
-
-int main() {
-    int result = gcd(28, 12);
-    return result;
-}`,
-      sumArray: `int sumArray(int arr[], int n) {
-    int sum = 0;
-    for(int i=0; i<n; i++) sum += arr[i];
-    return sum;
-}
-
-int main() {
-    int arr[5] = {1,2,3,4,5};
-    int result = sumArray(arr, 5);
-    return result;
-}`
-    };
-
-    let container = document.getElementById('graph');
-    let nodes = new vis.DataSet([]);
-    let edges = new vis.DataSet([]);
-    let network;
-    let steps = [];
-    let stepIndex = 0;
-    let previousLine = null;
-
-    const options = {
-      layout: {
-        hierarchical: {
-          direction: "UD",
-          sortMethod: "directed",
-          nodeSpacing: 150,
-          levelSeparation: 120
-        }
-      },
-      physics: false,
-      edges: {
-        arrows: 'to',
-        font: { size: 14, color: "#fff", background: "#007bff", strokeWidth: 0, align: "middle" },
-        smooth: true
-      },
-      nodes: {
-        shape: 'box',
-        margin: 10,
-        color: { background: '#222', border: '#007bff', highlight: { background: '#333', border: '#00f' } },
-        font: { color: "#fff" }
-      }
-    };
-
-    function initGraph() {
-      nodes.clear();
-      edges.clear();
-      network = new vis.Network(container, {nodes, edges}, options);
-      document.getElementById("outputArea").textContent = "";
-    }
-
-    function highlightLine(lineNumber) {
-      const code = document.getElementById("codeArea").textContent.split("\n");
-      const highlightedCode = code.map((line, index) => {
-        if (index === lineNumber) return `<span class="highlight-line">${line}</span>`;
-        return line;
-      }).join("\n");
-      document.getElementById("codeArea").innerHTML = highlightedCode;
-      Prism.highlightAll();
-    }
-
-    function loadFunction() {
-      let func = document.getElementById("functionSelect").value;
-      document.getElementById("codeArea").textContent = codes[func];
-      Prism.highlightAll();
-      initGraph();
-      stepIndex = 0;
-
-      if (func === "normal") {
-        steps = [
-          () => { nodes.add({id: 1, label: "main()"}); highlightLine(4); },
-          () => { nodes.add({id: 2, label: "add(3,4)"}); highlightLine(0); },
-          () => { edges.add({from: 1, to: 2, label: "call"}); highlightLine(5); },
-          () => { edges.update({id: 3, from: 2, to: 1, label: "7"}) || edges.add({id:3, from: 2, to:1, label: "7"}); highlightLine(1); },
-          () => { document.getElementById("outputArea").textContent = "Result: 7"; highlightLine(6); }
-        ];
-      } else if (func === "factorial") {
-        steps = [
-          () => { nodes.add({id: 1, label: "main()"}); highlightLine(6); },
-          () => { nodes.add({id: 2, label: "fact(5)"}); highlightLine(0); },
-          () => { edges.add({from: 1, to: 2, label: "call"}); highlightLine(7); },
-          () => { nodes.add({id: 3, label: "fact(4)"}); highlightLine(0); },
-          () => { edges.add({from: 2, to: 3, label: "call"}); highlightLine(2); },
-          () => { nodes.add({id: 4, label: "fact(3)"}); highlightLine(0); },
-          () => { edges.add({from: 3, to: 4, label: "call"}); highlightLine(2); },
-          () => { nodes.add({id: 5, label: "fact(2)"}); highlightLine(0); },
-          () => { edges.add({from: 4, to: 5, label: "call"}); highlightLine(2); },
-          () => { nodes.add({id: 6, label: "fact(1)"}); highlightLine(0); },
-          () => { edges.add({from: 5, to: 6, label: "call"}); highlightLine(2); },
-          () => { nodes.add({id: 7, label: "fact(0)"}); highlightLine(0); },
-          () => { edges.add({from: 6, to: 7, label: "call"}); highlightLine(1); },
-          () => { edges.add({from: 7, to: 6, label: "1"}); highlightLine(1); },
-          () => { edges.add({from: 6, to: 5, label: "1"}); highlightLine(1); },
-          () => { edges.add({from: 5, to: 4, label: "2"}); highlightLine(1); },
-          () => { edges.add({from: 4, to: 3, label: "6"}); highlightLine(1); },
-          () => { edges.add({from: 3, to: 2, label: "24"}); highlightLine(1); },
-          () => { edges.add({from: 2, to: 1, label: "120"}); highlightLine(1); },
-          () => { document.getElementById("outputArea").textContent = "Result: 120"; highlightLine(7); }
-        ];
-      } else if (func === "fibonacci") {
-        steps = [
-          () => { nodes.add({id: 1, label: "main()"}); highlightLine(6); },
-          () => { nodes.add({id: 2, label: "fib(5)"}); highlightLine(0); },
-          () => { edges.add({from: 1, to: 2, label: "call"}); highlightLine(10); },
-          () => { nodes.add({id: 3, label: "fib(4)"}); highlightLine(0); },
-          () => { edges.add({from: 2, to: 3, label: "call"}); highlightLine(2); },
-          () => { nodes.add({id: 4, label: "fib(3)"}); highlightLine(0); },
-          () => { edges.add({from: 3, to: 4, label: "call"}); highlightLine(2); },
-          () => { nodes.add({id: 5, label: "fib(2)"}); highlightLine(0); },
-          () => { edges.add({from: 4, to: 5, label: "call"}); highlightLine(2); },
-          () => { nodes.add({id: 6, label: "fib(1)"}); highlightLine(1); },
-          () => { edges.add({from: 5, to: 6, label: "call"}); highlightLine(1); },
-          () => { edges.add({from: 6, to: 5, label: "1"}); highlightLine(1); },
-          () => { nodes.add({id: 7, label: "fib(0)"}); highlightLine(2); },
-          () => { edges.add({from: 5, to: 7, label: "call"}); highlightLine(2); },
-          () => { edges.add({from: 7, to: 5, label: "0"}); highlightLine(1); },
-          () => { edges.add({from: 5, to: 4, label: "1"}); highlightLine(1); },
-          () => { edges.add({from: 4, to: 3, label: "2"}); highlightLine(1); },
-          () => { edges.add({from: 3, to: 2, label: "3"}); highlightLine(1); },
-          () => { edges.add({from: 2, to: 1, label: "5"}); highlightLine(1); },
-          () => { document.getElementById("outputArea").textContent = "Result: 5"; highlightLine(7); }
-        ];
-      } else if(func === "gcd") {
-        steps = [
-          () => { nodes.add({id: 1, label: "main()"}); highlightLine(6); },
-          () => { nodes.add({id: 2, label: "gcd(28,12)"}); highlightLine(0); },
-          () => { edges.add({from: 1, to: 2, label: "call"}); highlightLine(10); },
-          () => { nodes.add({id: 3, label: "gcd(12,4)"}); highlightLine(0); },
-          () => { edges.add({from: 2, to: 3, label: "call"}); highlightLine(2); },
-          () => { nodes.add({id: 4, label: "gcd(4,0)"}); highlightLine(0); },
-          () => { edges.add({from: 3, to: 4, label: "call"}); highlightLine(2); },
-          () => { edges.add({from: 4, to: 3, label: "4"}); highlightLine(1); },
-          () => { edges.add({from: 3, to: 2, label: "4"}); highlightLine(1); },
-          () => { edges.add({from: 2, to: 1, label: "4"}); highlightLine(1); },
-          () => { document.getElementById("outputArea").textContent = "GCD: 4"; highlightLine(7); }
-        ];
-    } 
-}
-
-    function nextStep() {
-      if (stepIndex < steps.length) {
-        steps[stepIndex]();
-        stepIndex++;
-      }
-    }
-
-    loadFunction();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
