@@ -10,7 +10,6 @@ A **C function call visualizer** that helps learners understand how function cal
   - Factorial (`fact`)
   - Fibonacci (`fib`)
   - Greatest Common Divisor (`gcd`)
-  - Sum of array elements (`sumArray`)
 - **Step-by-step execution** with a `Next Step` button.
 - **Code highlighting** with Prism.js.
 - **Interactive graph** of function calls using Vis.js.
